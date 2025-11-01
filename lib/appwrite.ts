@@ -1,4 +1,4 @@
-import { CreateUserPrams, SignInParams } from "@/type";
+import { CreateUserPrams, GetMenuParams, SignInParams } from "@/type";
 import {
   Account,
   Avatars,
@@ -6,6 +6,7 @@ import {
   Databases,
   ID,
   Query,
+  Storage,
 } from "react-native-appwrite";
 
 export const appwriteConfig = {
@@ -13,7 +14,7 @@ export const appwriteConfig = {
   platform: "com.korecode.craveexpress",
   projectId: process.env.EXPO_PUBLIC_APPWRITE_PROJECT_ID!,
   databaseId: process.env.EXPO_PUBLIC_APPWRITE_DATABASE_ID!,
-  bucketId: process.env.V,
+  bucketId: process.env.EXPO_PUBLIC_APPWRITE_BUCKET_ID!,
   usersCollectionId: process.env.EXPO_PUBLIC_APPWRITE_USERS_COLLECTION_ID!,
   categoriesCollectionId:
     process.env.EXPO_PUBLIC_APPWRITE_CATEGORIES_COLLECTION_ID!,
@@ -33,6 +34,7 @@ client
 
 export const account = new Account(client);
 export const databases = new Databases(client);
+export const storage = new Storage(client);
 export const avatars = new Avatars(client);
 
 export const createUser = async ({
@@ -84,6 +86,37 @@ export const getCurrentUser = async () => {
     return currentUser.documents[0];
   } catch (error) {
     console.error(error);
+    throw new Error(error as string);
+  }
+};
+
+export const getMenus = async ({ category, query, limit }: GetMenuParams) => {
+  try {
+    const queries: string[] = [Query.limit(limit)];
+    if (category) queries.push(Query.equal("categories", category));
+    if (query) queries.push(Query.equal("name", query));
+
+    const menus = await databases.listDocuments(
+      appwriteConfig.databaseId,
+      appwriteConfig.menusCollectionId,
+      queries
+    );
+
+    return menus.documents;
+  } catch (error) {
+    throw new Error(error as string);
+  }
+};
+
+export const getCategories = async () => {
+  try {
+    const categories = await databases.listDocuments(
+      appwriteConfig.databaseId,
+      appwriteConfig.categoriesCollectionId
+    );
+
+    return categories.documents;
+  } catch (error) {
     throw new Error(error as string);
   }
 };
