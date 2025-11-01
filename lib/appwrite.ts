@@ -92,6 +92,7 @@ export const getCurrentUser = async () => {
 
 export const getMenus = async ({ category, query, limit }: GetMenuParams) => {
   try {
+    console.log({ query, category, limit });
     const queries: string[] = [Query.limit(limit)];
     if (category) queries.push(Query.equal("categories", category));
     if (query) queries.push(Query.equal("name", query));
@@ -101,7 +102,7 @@ export const getMenus = async ({ category, query, limit }: GetMenuParams) => {
       appwriteConfig.menusCollectionId,
       queries
     );
-
+    console.log({ data: menus.documents });
     return menus.documents;
   } catch (error) {
     throw new Error(error as string);
