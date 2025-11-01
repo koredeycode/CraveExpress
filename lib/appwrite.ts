@@ -13,7 +13,15 @@ export const appwriteConfig = {
   platform: "com.korecode.craveexpress",
   projectId: process.env.EXPO_PUBLIC_APPWRITE_PROJECT_ID!,
   databaseId: process.env.EXPO_PUBLIC_APPWRITE_DATABASE_ID!,
+  bucketId: process.env.V,
   usersCollectionId: process.env.EXPO_PUBLIC_APPWRITE_USERS_COLLECTION_ID!,
+  categoriesCollectionId:
+    process.env.EXPO_PUBLIC_APPWRITE_CATEGORIES_COLLECTION_ID!,
+  menusCollectionId: process.env.EXPO_PUBLIC_APPWRITE_MENUS_COLLECTION_ID!,
+  customizationsCollectionId:
+    process.env.EXPO_PUBLIC_APPWRITE_CUSTOMIZATIONS_COLLECTION_ID!,
+  menuCustomizationsCollectionId:
+    process.env.EXPO_PUBLIC_APPWRITE_MENU_CUSTOMIZATIONS_COLLECTION_ID!,
 };
 
 export const client = new Client();
